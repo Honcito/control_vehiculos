@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{plantilla/template_admin :: head}">
+  <meta charset="UTF-8">
+  <title>Gestión de Usuarios</title>
+</head>
+<body>
+<header th:replace="~{plantilla/template_admin :: header}"></header>
+
+<div class="container">
+  <div class="card bg-light">
+    <div class="card-header bg-dark text-white" th:text="${titulo}"></div>
+    <div class="card-body">
+      <form th:action="@{/usuarios/save}" th:object="${usuario}" method="post" id="userForm">
+        <div class="form-group row">
+          <input type="hidden" th:field="*{id_usuario}">
+          <label class="col-md-2" for="nombre">Nombre Usuario:</label>
+          <input type="text" th:field="*{nombre}" class="form-control form-control-sm col-md-6"
+                 id="nombre" placeholder="Nombre del Usuario">
+          <!-- Validación de errores -->
+          <small class="form-text text-danger" th:if="${#fields.hasErrors('nombre')}"
+                 th:errors="*{nombre}"></small>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2" for="password">Contraseña:</label>
+          <input type="password" th:field="*{password}" class="form-control form-control-sm col-md-6"
+                 id="password"
+                 placeholder="Contraseña">
+          <!-- Validación de errores -->
+          <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}"
+                 th:errors="*{password}"></small>
+        </div>
+        <div class="form-group">
+          <label for="rol">Rol</label>
+          <select class="form-control" id="rol" th:field="*{rol}">
+            <option th:each="rol : ${T(org.hong.control_vehiculos.entity.Rol).values()}" th:value="${rol}"
+                    th:text="${rol}"></option>
+          </select>
+        </div>
+        <div class="card-footer bg-dark">
+          <input type="submit" class="btn btn-primary btn-sm" value="Guardar"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{plantilla/template_admin :: footer}"></footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function () {
+    $("#userForm").submit(function (event) {
+      event.preventDefault();
+      var formData = {
+        id_usuario: $("input[name='id_usuario']").val(),
+        nombre: $("#nombre").val(),
+        password: $("#password").val(),
+        rol: $("#rol").val()
+      };
+      $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/usuarios/save",
+        data: JSON.stringify(formData),
+        success: function (result) {
+          console.log("Usuario guardado con éxito");
+          window.location.replace("/usuarios/"); // Redirigir a la lista de usuarios
+        },
+        error: function (error) {
+          console.error("Error al guardar el usuario: ", error);
+          // mostrar un mensaje de error al usuario o realizar otras acciones aquí
+        }
+      });
+    });
+  });
+  /*]]>*/
+</script>
+
+
+</body>
+</html>

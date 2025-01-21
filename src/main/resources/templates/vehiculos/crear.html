@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{plantilla/template_admin :: head}">
+  <meta charset="UTF-8">
+  <title>Gestión de Vehículos</title>
+</head>
+<body>
+<header th:replace="~{plantilla/template_admin :: header}"></header>
+
+<div class="container">
+  <div class="card bg-light">
+    <div class="card-header bg-dark text-white">Gestión de Vehículos</div>
+    <div class="card-body">
+      <form th:action="@{/vehiculos/save}" th:object="${vehiculo}" method="post">
+        <div class="form-group row">
+          <input type="hidden" th:field="*{cod_vehiculo}">
+          <label class="col-md-2" for="matricula">Matrícula:</label>
+          <input type="text" th:field="*{matricula}" class="form-control form-control-sm col-md-6" id="matricula"
+                 placeholder="Matrícula del vehículo">
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2" for="propietario">Empresa:</label>
+          <select th:field="*{propietario.id_propietario}" class="form-control form-control-sm col-md-6" id="propietario">
+            <option th:each="propietario : ${propietarios}" th:value="${propietario.id_propietario}" th:text="${propietario.empresa}"></option>
+          </select>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2" for="observaciones">Observaciones:</label>
+          <input type="text" th:field="*{observaciones}" class="form-control form-control-sm col-md-6"
+                 id="observaciones" placeholder="Observaciones">
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2" for="num_aparcamiento">Plaza de aparcamiento:</label>
+          <input type="text" th:field="*{num_aparcamiento}" class="form-control form-control-sm col-md-6"
+                 id="num_aparcamiento" placeholder="Plaza Aparcamiento">
+        </div>
+
+        <div class="card-footer bg-dark">
+          <input type="submit" class="btn btn-primary btn-sm" value="Guardar"/>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{plantilla/template_admin :: footer}"></footer>
+</body>
+</html>

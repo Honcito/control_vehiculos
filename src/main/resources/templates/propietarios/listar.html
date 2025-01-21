@@ -1,10 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+<html lang="es" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{plantilla/template_admin :: head}">
+    <meta charset="UTF-8">
+    <title>Listado de Propietarios</title>
+    <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
 </head>
 <body>
-$END$
+<header th:replace="~{plantilla/template_admin :: header}"></header>
+
+<div class="container">
+    <h1 class="mt-3" th:text="${titulo}"></h1>
+    <a class="btn btn-primary btn-sm mb-3" th:href="@{/propietarios/create}" th:text="'Nuevo Propietario'"
+       title="Introducir Nuevo Propietario"></a>
+
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Número de plazas</th>
+            <th scope="col">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="propietario : ${propietarios}">
+            <td th:text="${propietario.id_propietario}"></td>
+            <td th:text="${propietario.nombre}"></td>
+            <td th:text="${propietario.telefono}"></td>
+            <td th:text="${propietario.empresa}"></td>
+            <td th:text="${propietario.plazas}"></td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-success btn-sm" th:href="@{'/propietarios/edit/' + ${propietario.id_propietario}}"
+                       th:text="'Editar'" title="Modificar Propietario"></a>
+                    <a class="btn btn-danger btn-sm" th:href="@{'/propietarios/delete/' + ${propietario.id_propietario}}"
+                       th:text="'Eliminar'" title="Eliminar Propietario"
+                       onclick="return confirm('¿Desea eliminar los datos del Propietario?');"></a>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+    <div class="container">
+        <div style="margin-bottom: 100px;"></div> <!-- Aquí se añade un margen inferior de 30px -->
+    </div>
+</div>
+
+<footer th:replace="~{plantilla/template_admin :: footer}"></footer>
 </body>
 </html>
