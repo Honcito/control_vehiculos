@@ -146,6 +146,20 @@
 
         // Verifico los datos en consola
         console.log("Datos enviados:", data);
+
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (response) {
+                console.log("Datos actualizados correctamente:", response);
+                cargarListaControles(); // Recargar la lista después de actualizar
+            },
+            error: function (error) {
+                console.error("Error al actualizar los datos:", error);
+            }
+        })
     }
 </script>
 </body>
