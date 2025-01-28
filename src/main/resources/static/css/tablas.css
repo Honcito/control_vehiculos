@@ -1,0 +1,41 @@
+.table {
+    width: 100%; /* Ancho total de la tabla */
+    border-collapse: collapse; /* Combina los bordes de las celdas */
+}
+
+/* Estilo para las celdas de encabezado */
+.table th {
+    background-color: #343a40; /* Color de fondo del encabezado */
+    color: #ffffff; /* Color del texto del encabezado */
+    text-align: left; /* Alineación del texto del encabezado */
+    padding: 10px; /* Espaciado interno del encabezado */
+    position: sticky; /* Hace que las cabeceras sean fijas */
+    top: 0; /* Las cabeceras permanecen en la parte superior al hacer scroll */
+    z-index: 1; /* Asegura que las cabeceras estén por encima de las celdas */
+}
+
+/* Estilo para las celdas de datos */
+.table td {
+    padding: 10px; /* Espaciado interno de las celdas de datos */
+}
+
+/* Estilo para las filas al pasar el ratón */
+.table tbody tr:hover {
+    background-color: rgba(198, 255, 227, 0.31); /* Color de fondo al pasar el ratón */
+}
+
+/* Ancho mínimo para la columna de acciones */
+.table th.actions, .table td.actions {
+    min-width: 150px !important;
+}
+
+/* Estilo para los botones en el grupo */
+.btn-group .btn {
+    margin-right: 5px !important;
+}
+
+/* Contenedor de la tabla con scroll */
+.table-container {
+    max-height: 400px; /* Altura máxima de la tabla visible */
+    overflow-y: auto; /* Habilita el scroll vertical si es necesario */
+}

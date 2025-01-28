@@ -1,0 +1,27 @@
+/*body {*/
+/*    background-image: url('/images/pexels-sound-on-3394666.jpg');*/
+/*    background-size: cover;*/
+/*    background-position: center bottom;*/
+/*    !*background-attachment: fixed; !* Hace que la imagen de fondo sea fija *!*!*/
+/*}*/
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    text-decoration: none;
+    padding: 10px 20px; /* Ajusta el espaciado entre los elementos del menú */
+    font-size: 18px; /* Ajusta el tamaño del texto */
+    color: #ffffff; /* Color del texto */
+}
+
+nav ul li a:hover {
+    color: blue; /* Color del texto al pasar el cursor por encima */
+}
