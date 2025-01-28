@@ -82,5 +82,71 @@
       </tbody>
   </table>
 </div>
+<div class="container">
+    <div style="margin-bottom: 100px;"></div>
+</div>
+<footer th:replace="~{plantilla/template_user :: footer}"></footer>
+
+<script>
+    // Asegura que sea una fecha válida
+    function isValidDate(d) {
+        return d instanceof Date &&!isNaN(d);
+    }
+
+    // Cambiar fecha al formato deseado YYYY-MM-DD HH:mm:ss.
+    function formatDate(date) {
+        let day =("0" + date.getDay()).slice(-2);
+        let month = ("0" + (date.getMonth() + 1)).slice(-2);
+        let year = date.getFullYear();
+        let hours = ("0" + date.getHours()).slice(-2);
+        let minutes = ("0" + date.getMinutes()).slice(-2);
+        let seconds = ("0" + date.getSeconds()).slice(-2);
+        return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+    }
+
+    // Actualizar la fila con la fecha actual al hacer click en la celda
+    function actualizarFila(button) {
+        let fila = $(button).closest('tr');
+        let id = fila.find('[data-id]').attr('data-id');
+        let matricula = fila.find('[.matricula-input').val();
+        let codVehiculo = fila.find('[.cod-vehicula]').val();
+        let empresa = fila.find('[.empresa-input').val();
+        let fechaSalida = fila.find('[.fecha-salida]').text().trim();
+        let observaciones = fila.find('[.observaciones]').text().trim();
+        let fechaEntrada = fila.find('[.fecha-entrada]').text().trim();
+
+        // Convertir las fechas a formato ISO si no están vacías y son válidas
+        let fechaSalidaIso = null;
+        let fechaEntradaIso = null;
+
+        if (fechaSalida) {
+            let parsedFechaSalida = new Date(Date.parse(fechaSalida));
+            if (isValidDate(parsedFechaSalida)) {
+                fechaSalidaIso = parsedFechaSalida.toISOString();
+            }
+        }
+
+        if (fechaEntrada) {
+            let parsedFechaEntrada = new Date(Date.parse(fechaEntrada));
+            if (isValidDate(parsedFechaEntrada)) {
+                fechaEntradaIso = parsedFechaEntrada.toISOString();
+            }
+        }
+
+        let url = '/control_vehiculos/actualizar/' + id;
+
+        let data = {
+            matricula: matricula,
+            cod_vehiculo: codVehiculo,
+            empresa: empresa,
+            fecha_salida: fechaSalidaIso,
+            observaciones: observaciones,
+            fecha_entrada: fechaEntradaIso
+        };
+
+        // Verifico los datos en consola
+        console.log("Datos enviados:", data);
+    }
+</script>
 </body>
 </html>
