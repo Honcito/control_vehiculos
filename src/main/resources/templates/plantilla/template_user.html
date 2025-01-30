@@ -7,6 +7,7 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" th:href="@{/static/css/nav.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/template.css}"/>
 </head>
 <body>
 
@@ -25,7 +26,13 @@
                 </button>
                 <!-- ENLACES DEL MENÚ -->
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-center">
+                        <!-- Logo dentro de la lista para mantener la alineación -->
+                        <li class="nav-item">
+                            <a class="nav-link logo-link" href="#">
+                                <img src="../../static/images/GrasalvaLogo.png" alt="Logo" class="nav-logo">
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" th:href="@{/home}">Inicio</a>
                         </li>
@@ -52,8 +59,38 @@
 
 </header>
 
-<!-- CONTENIDO-->
-<div class="container"></div>
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container mt-5">
+    <!-- Mensaje de Bienvenida -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1>Bienvenido al Sistema de Control de Vehículos</h1>
+        </div>
+    </div>
+
+    <!-- Instrucciones para Usuarios -->
+    <div class="row mb-4 d-flex justify-content-center align-items-center"> <!-- Agregado d-flex, justify-content-center y align-items-center -->
+        <div class="col-12 col-md-8"> <!-- Cambié col-md-6 por col-md-8 para más ancho -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Instrucciones para Usuarios</h4>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Ingreso de Matrícula:</strong> Introduzca la matrícula del vehículo en el campo correspondiente. El nombre de la empresa se completará automáticamente.</li>
+                        <li><strong>Fecha/Hora de Salida:</strong> Haga clic en el campo de fecha/hora de salida para completar automáticamente la información con la fecha y hora actuales.</li>
+                        <li><strong>Guardar Datos:</strong> Una vez que los datos estén completos, haga clic en el botón Guardar para registrar la salida del vehículo.</li>
+                        <li><strong>Fecha/Hora de Entrada:</strong> Cuando el vehículo regrese, haga clic en el campo de fecha/hora de entrada para registrar su regreso.</li>
+                        <li><strong>Actualizar Datos:</strong> Una vez que los datos estén completos, haga clic en el botón Actualizar para registrar la entrada del vehículo.</li>
+                        <li><strong>Observaciones:</strong> Si lo desea, agregue una observación en el campo correspondiente para el vehículo.</li>
+                        <li><strong>Cerrar Sesión:</strong> Al finalizar su turno, haga clic en Cerrar sesión para permitir que el siguiente empleado inicie sesión de manera segura.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!-- PIE DE PÁGINA -->
