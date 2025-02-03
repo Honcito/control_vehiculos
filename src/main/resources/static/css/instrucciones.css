@@ -1,0 +1,47 @@
+/* Estilo para el contenedor de instrucciones */
+.instructions {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.instructions h3 {
+    font-size: 1.8rem;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+.instructions ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.instructions li {
+    margin-bottom: 10px;
+}
+
+.instructions li strong {
+    color: #007bff;
+}
+
+/* Ajustes para las tarjetas */
+.card {
+    margin-bottom: 20px;
+}
+
+.card-header {
+    font-size: 1.2rem;
+}
+
+.card-body ul {
+    padding-left: 15px;
+}
+
+.instructions h3, .card-header h4 {
+    font-size: 2rem; /* Aumenta el tamaño del título */
+}
+
+.instructions ul, .card-body ul {
+    font-size: 1.1rem; /* Aumenta el tamaño del texto de la lista */
+}

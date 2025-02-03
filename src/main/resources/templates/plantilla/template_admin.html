@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/static/css/background.css"/>
     <link rel="stylesheet" th:href="@{/static/css/nav.css}"/>
     <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
-    <link rel="stylesheet" th:href="@{/static/css/template.css}"/>
+    <link rel="stylesheet" th:href="@{/static/css/instrucciones.css}"/>
 </head>
 <body>
 
@@ -50,7 +50,7 @@
                             <a class="nav-link" th:href="@{/control_vehiculos/}">Control de Vehículos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/openpdf/control_vehiculos}">Exportar a PDF</a>
+                            <a class="nav-link" th:href="@{/openpdf/control_vehiculos}" target="_blank">Exportar a PDF</a>
                         </li>
                         <!-- Agregar botón de logout -->
                         <li class="nav-item">
@@ -72,60 +72,54 @@
 
 </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="container mt-5">
-        <!-- Mensaje de Bienvenida -->
-        <div class="row mb-4">
-            <div class="col-12 text-center">
-                <h1>Bienvenido al Sistema de Control de Vehículos</h1>
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container mt-5">
+    <!-- Mensaje de Bienvenida -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1>Bienvenido al Sistema de Control de Vehículos</h1>
+        </div>
+    </div>
+
+    <!-- Instrucciones para Usuarios -->
+    <div class="row mb-4">
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Instrucciones para Usuarios</h4>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Ingreso de Matrícula:</strong> Introduzca la matrícula del vehículo en el campo correspondiente. El nombre de la empresa se completará automáticamente.</li>
+                        <li><strong>Fecha/Hora de Salida:</strong> Haga clic en el campo de fecha/hora de salida para completar automáticamente la información con la fecha y hora actuales.</li>
+                        <li><strong>Guardar Datos:</strong> Una vez que los datos estén completos, haga clic en el botón Guardar para registrar la salida del vehículo.</li>
+                        <li><strong>Fecha/Hora de Entrada:</strong> Cuando el vehículo regrese, haga clic en el campo de fecha/hora de entrada para registrar su regreso.</li>
+                        <li><strong>Observaciones:</strong> Si lo desea, agregue una observación en el campo correspondiente para el vehículo.</li>
+                        <li><strong>Cerrar Sesión:</strong> Al finalizar su turno, haga clic en Cerrar sesión para permitir que el siguiente empleado inicie sesión de manera segura.</li>
+                    </ul>
+                </div>
             </div>
         </div>
 
-        <!-- Instrucciones para Usuarios -->
-        <div class="row mb-4">
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h4>Instrucciones para Usuarios</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li><strong>Ingreso de Matrícula:</strong> Introduzca la matrícula del vehículo en el campo correspondiente. El nombre de la empresa se completará automáticamente.</li>
-                            <li><strong>Fecha/Hora de Salida:</strong> Haga clic en el campo de fecha/hora de salida para completar automáticamente la información con la fecha y hora actuales.</li>
-                            <li><strong>Guardar Datos:</strong> Una vez que los datos estén completos, haga clic en el botón Guardar para registrar la salida del vehículo.</li>
-                            <li><strong>Fecha/Hora de Entrada:</strong> Cuando el vehículo regrese, haga clic en el campo de fecha/hora de entrada para registrar su regreso.</li>
-                            <li><strong>Actualizar Datos:</strong> Una vez que los datos estén completos, haga clic en el botón Actualizar para registrar la entrada del vehículo.</li>
-                            <li><strong>Observaciones:</strong> Si lo desea, agregue una observación en el campo correspondiente para el vehículo.</li>
-                            <li><strong>Cerrar Sesión:</strong> Al finalizar su turno, haga clic en Cerrar sesión para permitir que el siguiente empleado inicie sesión de manera segura.</li>
-                        </ul>
-                    </div>
+        <!-- Instrucciones para Administradores -->
+        <div class="col-12 col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4>Instrucciones para Administradores</h4>
                 </div>
-            </div>
-
-            <!-- Instrucciones para Administradores -->
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-header bg-success text-white">
-                        <h4>Instrucciones para Administradores</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul>
-                            <li><strong>Acceso Completo:</strong> Los administradores tienen acceso total al sistema, incluyendo la gestión de registros de vehículos, propietarios y empleados.</li>
-                            <li><strong>Consulta de Registros:</strong> Los administradores pueden ver y consultar todos los registros de entrada y salida de vehículos, así como detalles de propietarios y empleados.</li>
-                            <li><strong>Gestión de Usuarios:</strong> Los administradores pueden agregar, editar o eliminar usuarios, asignándoles roles específicos según sea necesario.</li>
-                            <li><strong>Generación de Reportes:</strong> Los administradores pueden generar reportes detallados sobre el uso del sistema, incluyendo información sobre los vehículos y otros registros.</li>
-                            <li><strong>Seguridad y Control:</strong> Los administradores tienen la capacidad de configurar los permisos y roles de los usuarios para mantener la seguridad del sistema.</li>
-                        </ul>
-                    </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>Acceso Completo:</strong> Los administradores tienen acceso total al sistema, incluyendo la gestión de registros de vehículos, propietarios y empleados.</li>
+                        <li><strong>Consulta de Registros:</strong> Los administradores pueden ver y consultar todos los registros de entrada y salida de vehículos, así como detalles de propietarios y empleados.</li>
+                        <li><strong>Gestión de Usuarios:</strong> Los administradores pueden agregar, editar o eliminar usuarios, asignándoles roles específicos según sea necesario.</li>
+                        <li><strong>Generación de Reportes:</strong> Los administradores pueden generar reportes detallados sobre el uso del sistema, incluyendo información sobre los vehículos y otros registros.</li>
+                        <li><strong>Seguridad y Control:</strong> Los administradores tienen la capacidad de configurar los permisos y roles de los usuarios para mantener la seguridad del sistema.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </div>
-
 
 
 <!-- PIE DE PÁGINA -->

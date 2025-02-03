@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Images</title>
+</head>
+<body>
+<!-- Thymeleaf genera automáticamente la URL relativa -->
+<div class="logo">
+    <img th:src="@{/images/1.png}" alt="logo">
+</div>
+
+<!-- Imagen directa con ruta absoluta -->
+<div class="logo1">
+    <img src="/images/1.jpg" alt="logo">
+</div>
+</body>
+</html>

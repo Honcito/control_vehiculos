@@ -3,6 +3,7 @@ package org.hong.control_vehiculos.controller;
 import jakarta.validation.Valid;
 import org.hong.control_vehiculos.entity.Propietario;
 import org.hong.control_vehiculos.entity.Vehiculo;
+import org.hong.control_vehiculos.repository.VehiculoRepository;
 import org.hong.control_vehiculos.service.PropietarioServiceImpl;
 import org.hong.control_vehiculos.service.VehiculoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,21 +13,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("vehiculos")
+@CrossOrigin(origins ="*")
 public class VehiculoController {
 
     @Autowired
     private VehiculoServiceImpl vehiculoService;
     @Autowired
     private PropietarioServiceImpl propietarioService;
+    private final VehiculoRepository vehiculoRepository;
 
 
     // Constructor injection
-    public VehiculoController(VehiculoServiceImpl vehiculoService, PropietarioServiceImpl propietarioService) {
+    public VehiculoController(VehiculoServiceImpl vehiculoService, PropietarioServiceImpl propietarioService,
+                              VehiculoRepository vehiculoRepository) {
         this.vehiculoService = vehiculoService;
         this.propietarioService = propietarioService;
+        this.vehiculoRepository = vehiculoRepository;
     }
 
     @GetMapping("/vehiculos/formulario")
@@ -109,6 +115,18 @@ public class VehiculoController {
         vehiculoService.eliminarVehiculo(id);
         System.out.println("Datos del vehículo " + vehiculo.getMatricula() + " eliminados con éxito");
         return "redirect:/vehiculos/";
+    }
+
+    @GetMapping("/buscar")
+    @ResponseBody
+    public List<String> buscarMatriculas(@RequestParam String term) {
+        List<String> matriculas = vehiculoRepository.findByMatriculaContainingIgnoreCase(term)
+                .stream()
+                .map(Vehiculo::getMatricula)
+                .collect(Collectors.toList());
+
+        System.out.println("Matrículas encontradas: " + matriculas); // Debug en consola
+        return matriculas;
     }
 
 

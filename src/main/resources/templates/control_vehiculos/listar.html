@@ -5,22 +5,24 @@
     <title>Control de Entrada/Salida de Vehículos</title>
     <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
     <script th:src="@{/static/js/interactiveTable.js}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.9.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <!-- Carga jQuery UI para el autocompletado -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Estilos de jQuery UI (si es necesario) -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <style>
         .table th {
             white-space: nowrap;
             text-overflow: ellipsis;
         }
-
         .table td {
             vertical-align: middle;
         }
-
         .btn-group {
             display: flex;
             align-items: center;
         }
-
         .btn-group .btn {
             margin-right: 5px;
         }
@@ -28,6 +30,7 @@
 </head>
 <body>
 <header th:replace="~{plantilla/template_user :: header}"></header>
+
 <div class="container">
     <h1 class="mt-3" th:text="${titulo}">Control de Entrada/Salida de Vehículos</h1>
 
@@ -45,20 +48,33 @@
         <tbody id="control_vehiculos-tbody">
         <tr th:each="controlVehiculo, rowStat : ${listadoControles}" th:index="${rowStat.index}">
             <td>
-                <input type="text" class="matricula-input" th:value="${controlVehiculo.matricula}"
-                       th:attr="data-row-index=${rowStat.index}">
+                <!--<input type="text" class="matricula-input" th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}">
                 <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
-                <input type="hidden" class="cod-vehiculo" th:value="${controlVehiculo.cod_vehiculo}">
+                <input type="hidden" class="cod-vehiculo" th:value="${controlVehiculo.cod_vehiculo}">-->
+                <!--                <input type="text" class="matricula-input" name="matricula" list="sugerencias-${rowStat.index}"-->
+                <!--                       th:value="${controlVehiculo.matricula}"-->
+                <!--                       th:attr="data-row-index=${rowStat.index}"-->
+                <!--                       oninput="buscarMatriculas()" autocomplete="off">-->
+                <!--                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"-->
+                <!--                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off">-->
+                <!--                <datalist id="sugerencias-${rowStat.index}"></datalist>-->
+                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"
+                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off"
+                       list="sugerencias-${rowStat.index}"> <!-- Aquí el atributo list debe coincidir con el id del datalist -->
+
+                <datalist id="sugerencias-${rowStat.index}"></datalist> <!-- Este es el datalist con un id único -->
+
+
+
+                <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+
             </td>
             <td>
                 <input type="text" class="empresa-input" th:value="${controlVehiculo.empresa}">
             </td>
-            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-salida"
-                th:text="${controlVehiculo.getFechaSalidaFormateada()}"></td>
-            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="observaciones"
-                th:text="${controlVehiculo.observaciones}"></td>
-            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-entrada"
-                th:text="${controlVehiculo.getFechaEntradaFormateada()}"></td>
+            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-salida" th:text="${controlVehiculo.getFechaSalidaFormateada()}"></td>
+            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="observaciones" th:text="${controlVehiculo.observaciones}"></td>
+            <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-entrada" th:text="${controlVehiculo.getFechaEntradaFormateada()}"></td>
             <td>
                 <div class="btn-group">
                     <button onclick="actualizarFila(this)" class="btn btn-primary">Actualizar</button>
@@ -95,14 +111,12 @@
 <footer th:replace="~{plantilla/template_user :: footer}"></footer>
 
 <script>
-    // Asegura que sea una fecha válida
     function isValidDate(d) {
         return d instanceof Date && !isNaN(d);
     }
 
-    // Cambiar fecha al formato deseado YYYY-MM-DD HH:mm:ss.
     function formatDate(date) {
-        let day = ("0" + date.getDay()).slice(-2);
+        let day = ("0" + date.getDate()).slice(-2);
         let month = ("0" + (date.getMonth() + 1)).slice(-2);
         let year = date.getFullYear();
         let hours = ("0" + date.getHours()).slice(-2);
@@ -111,32 +125,31 @@
         return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
-    // Actualizar la fila con la fecha actual al hacer click en la celda
     function actualizarFila(button) {
         let fila = $(button).closest('tr');
         let id = fila.find('[data-id]').attr('data-id');
-        let matricula = fila.find('[.matricula-input').val();
-        let codVehiculo = fila.find('[.cod-vehicula]').val();
-        let empresa = fila.find('[.empresa-input').val();
-        let fechaSalida = fila.find('[.fecha-salida]').text().trim();
-        let observaciones = fila.find('[.observaciones]').text().trim();
-        let fechaEntrada = fila.find('[.fecha-entrada]').text().trim();
+        let matricula = fila.find('.matricula-input').val();
+        let codVehiculo = fila.find('.cod-vehiculo').val();
+        let empresa = fila.find('.empresa-input').val();
+        let fechaSalida = fila.find('.fecha-salida').text().trim();
+        let observaciones = fila.find('.observaciones').text().trim();
+        let fechaEntrada = fila.find('.fecha-entrada').text().trim();
 
         // Convertir las fechas a formato ISO si no están vacías y son válidas
-        let fechaSalidaIso = null;
-        let fechaEntradaIso = null;
+        let fechaSalidaISO = null;
+        let fechaEntradaISO = null;
 
         if (fechaSalida) {
             let parsedFechaSalida = new Date(Date.parse(fechaSalida));
             if (isValidDate(parsedFechaSalida)) {
-                fechaSalidaIso = parsedFechaSalida.toISOString();
+                fechaSalidaISO = parsedFechaSalida.toISOString();
             }
         }
 
         if (fechaEntrada) {
             let parsedFechaEntrada = new Date(Date.parse(fechaEntrada));
             if (isValidDate(parsedFechaEntrada)) {
-                fechaEntradaIso = parsedFechaEntrada.toISOString();
+                fechaEntradaISO = parsedFechaEntrada.toISOString();
             }
         }
 
@@ -146,44 +159,41 @@
             matricula: matricula,
             cod_vehiculo: codVehiculo,
             empresa: empresa,
-            fecha_salida: fechaSalidaIso,
+            fecha_salida: fechaSalidaISO,
             observaciones: observaciones,
-            fecha_entrada: fechaEntradaIso
+            fecha_entrada: fechaEntradaISO
         };
 
-        // Verifico los datos en consola
-        console.log("Datos enviados:", data);
+        console.log("Datos enviados:", data); // Añade esto para verificar los datos en la consola del navegador
 
-        // Petición PUT
         $.ajax({
             url: url,
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function (response) {
-                console.log("Datos actualizados correctamente:", response);
+            success: function(response) {
+                console.log('Datos actualizados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de actualizar
             },
-            error: function (error) {
-                console.error("Error al actualizar los datos:", error);
+            error: function(error) {
+                console.error('Error al actualizar datos:', error);
             }
         });
     }
 
     function guardarFila(button) {
         let fila = $(button).closest('tr');
-        let matricula = fila.find('[.matricula-input').val();
-        let codVehiculo = fila.find('[.cod-vehicula]').val();
-        let empresa = fila.find('[.empresa-input').val();
-        let fechaSalida = fila.find('[.new-control.fecha-salida]').text().trim();
-        let observaciones = fila.find('[.new-control.observaciones]').text().trim();
-        let fechaEntrada = fila.find('[.new-control.fecha-entrada]').text().trim();
+        let matricula = fila.find('.matricula-input').val();
+        let codVehiculo = fila.find('.cod-vehiculo').val();
+        let empresa = fila.find('.empresa-input').val();
+        let fechaSalida = fila.find('.fecha-salida').text().trim();
+        let observaciones = fila.find('.observaciones').text().trim();
+        let fechaEntrada = fila.find('.fecha-entrada').text().trim();
 
         // Convertir las fechas a formato ISO si no están vacías y son válidas
         let fechaSalidaISO = null;
         let fechaEntradaISO = null;
 
-        // Validaciones de formato de fechas
         if (fechaSalida) {
             let parsedFechaSalida = new Date(Date.parse(fechaSalida));
             if (isValidDate(parsedFechaSalida)) {
@@ -209,21 +219,19 @@
             fecha_entrada: fechaEntradaISO
         };
 
-        // Verificar los datos en consola del navegador
-        console.log("Datos enviados:", data);
+        console.log("Datos enviados:", data); // Añade esto para verificar los datos en la consola del navegador
 
-        // Petición POST
         $.ajax({
             url: url,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function (response) {
-                console.log("Datos guardados correctamente:", response);
+            success: function(response) {
+                console.log('Datos guardados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de guardar
             },
-            error: function (error) {
-                console.error("Error al guardar los datos:", error);
+            error: function(error) {
+                console.error('Error al guardar datos:', error);
             }
         });
     }
@@ -232,23 +240,19 @@
         let fila = $(button).closest('tr');
         let id = fila.find('[data-id]').attr('data-id');
 
-        let url = '/control_vehiculos/eliminar/' + id;
-
-        // Petición DELETE
         $.ajax({
-            url: url,
+            url: '/control_vehiculos/eliminar/' + id,
             type: 'DELETE',
-            success: function (response) {
-                console.log("Datos eliminados correctamente:", response);
+            success: function(response) {
+                console.log('Datos eliminados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de eliminar
             },
-            error: function (error) {
-                console.error("Error al eliminar los datos:", error);
+            error: function(error) {
+                console.error('Error al eliminar datos:', error);
             }
         });
     }
 
-    // Listar control_vehiculos
     function cargarListaControles() {
         $.ajax({
             url: '/control_vehiculos/listar',
@@ -267,6 +271,7 @@
                         <td>
                             <input type="text" class="matricula-input" value="${controlVehiculo.matricula}" data-row-index="${index}">
                             <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+
                             <input type="hidden" class="cod-vehiculo" value="${controlVehiculo.cod_vehiculo}">
                         </td>
                         <td>
@@ -332,7 +337,7 @@
                     success: function(data) {
                         if (data.cod_vehiculo) {
                             codVehiculoInput.val(data.cod_vehiculo);
-                            empresaInput.val(data.nombre_empresa || ''); // Asegúrate de que esto funcione correctamente
+                            empresaInput.val(data.nombre_empresa || '');
                             inputElement.closest('tr').find('.error').hide();
                         } else {
                             codVehiculoInput.val('');
@@ -357,6 +362,92 @@
             $(this).text(formatDate(new Date()));
         });
     });
+
+    $(document).ready(function() {
+        // Asegúrate de que el ID de la matrícula sea único por fila
+        $(document).on('input', '.matricula-input', function() {
+            let inputElement = $(this);
+            let inputValue = inputElement.val();
+            let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+            let empresaInput = inputElement.closest('tr').find('.empresa-input');
+
+            if (inputValue.trim() !== '') {
+                $.ajax({
+                    url: '/control_vehiculos/obtenerCodVehiculo?matricula=' + encodeURIComponent(inputValue),
+                    type: 'GET',
+                    success: function(data) {
+                        if (data.cod_vehiculo) {
+                            codVehiculoInput.val(data.cod_vehiculo);
+                            empresaInput.val(data.nombre.empresa || '');
+                            inputElement.closest('tr').find('.error').hide();
+                        } else {
+                            codVehiculoInput.val('');
+                            empresaInput.val('');
+                            inputElement.closest('tr').find('.error').show();
+                        }
+                    },
+                    error: function() {
+                        codVehiculoInput.val('');
+                        empresaInput.val('');
+                        inputElement.closest('tr').find('.error').show();
+                    }
+                });
+            } else {
+                codVehiculoInput.val('');
+                empresaInput.val('');
+                inputElement.closest('tr').find('.error').hide();
+            }
+        });
+
+        $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+            $(this).text(formatDate(new Date()));
+        });
+    });
+
+    $(document).ready(function() {
+        $(document).on('input', '.matricula-input', function() {
+            let inputElement = $(this);
+            let inputValue = inputElement.val();
+            let datalistElement = inputElement.siblings('datalist');
+            let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+            let empresaInput = inputElement.closest('tr').find('.empresa-input');
+            let errorSpan = inputElement.closest('tr').find('.error');
+
+            // Borrar las sugerencias previas
+            datalistElement.empty();
+
+            if (inputValue.trim() !== '') {
+                $.ajax({
+                    url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
+                    type: 'GET',
+                    success: function(data) {
+                        // Si la respuesta contiene sugerencias
+                        if (Array.isArray(data)) {
+                            data.forEach(function(matricula) {
+                                // Añadir cada matrícula como una opción en el datalist
+                                datalistElement.append(`<option value="${matricula}">`);
+                            });
+                            errorSpan.hide();
+                        } else {
+                            errorSpan.show();
+                        }
+                    },
+                    error: function() {
+                        datalistElement.empty();
+                        errorSpan.show();
+                    }
+                });
+            } else {
+                datalistElement.empty();
+                errorSpan.hide();
+            }
+        });
+
+        $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+            $(this).text(formatDate(new Date()));
+        });
+    });
+
 </script>
 </body>
 </html>

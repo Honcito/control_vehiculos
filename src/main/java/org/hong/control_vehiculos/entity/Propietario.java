@@ -36,4 +36,6 @@ public class Propietario {
     @OneToMany(mappedBy = "propietario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Vehiculo> vehiculos;
 
+
+
 }

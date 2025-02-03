@@ -28,7 +28,7 @@ nav ul li a:hover {
 
 /* Ajustes para el logo dentro de la lista */
 .nav-logo {
-    height: 80px; /* Tamaño ajustado para que coincida con el texto */
+    height: 60px; /* Tamaño ajustado para que coincida con el texto */
     width: auto;
     margin-right: 10px; /* Espaciado entre logo y primer elemento */
 }

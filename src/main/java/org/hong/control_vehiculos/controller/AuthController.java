@@ -1,6 +1,6 @@
 package org.hong.control_vehiculos.controller;
 
-import org.hong.control_vehiculos.entity.Rol;
+
 import org.hong.control_vehiculos.entity.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +35,17 @@ public class AuthController {
     @PostMapping("/register")
     public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario, BindingResult result, Model model) {
         try {
-            usuario.setRol(ROLE_USER); // Establecer el rol de User por defecto
+            usuario.setRol(ROLE_USER); // Establece el rol por defecto
             ResponseEntity<Object> response = usuarioController.saveUser(usuario, result);
             if (response.getStatusCode().is2xxSuccessful()) {
                 return "redirect:/usuarios/listar"; // Redirige a la lista de usuarios
             } else {
                 model.addAttribute("error", "Error al registrar el usuario: " + response.getBody());
-                return "auty/register"; // Redirige a la vista del registro con el mensaje de error
+                return "auth/register"; // Vuelve a la vista de registro con el mensaje de error
             }
-        }  catch (Exception e) {
+        } catch (Exception e) {
             model.addAttribute("error", "Error al registrar el usuario: " + e.getMessage());
-            return "auth/register";
+            return "auth/register"; // Vuelve a la vista de registro con el mensaje de error
         }
     }
 }
