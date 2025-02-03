@@ -4,29 +4,14 @@
     <meta charset="UTF-8">
     <title>Control de Entrada/Salida de Vehículos</title>
     <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
+    <script th:src="@{/static/css/table.css}"></script>
     <script th:src="@{/static/js/interactiveTable.js}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Carga jQuery UI para el autocompletado -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- Estilos de jQuery UI (si es necesario) -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <style>
-        .table th {
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .table td {
-            vertical-align: middle;
-        }
-        .btn-group {
-            display: flex;
-            align-items: center;
-        }
-        .btn-group .btn {
-            margin-right: 5px;
-        }
-    </style>
+
 </head>
 <body>
 <header th:replace="~{plantilla/template_user :: header}"></header>
@@ -122,13 +107,13 @@
         let hours = ("0" + date.getHours()).slice(-2);
         let minutes = ("0" + date.getMinutes()).slice(-2);
         let seconds = ("0" + date.getSeconds()).slice(-2);
-        return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+
+        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
     }
 
     function actualizarFila(button) {
         let fila = $(button).closest('tr');
         let id = fila.find('[data-id]').attr('data-id');
-        let matricula = fila.find('.matricula-input').val();
         let codVehiculo = fila.find('.cod-vehiculo').val();
         let empresa = fila.find('.empresa-input').val();
         let fechaSalida = fila.find('.fecha-salida').text().trim();
@@ -449,5 +434,6 @@
     });
 
 </script>
+
 </body>
 </html>

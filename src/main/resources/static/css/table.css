@@ -1,0 +1,14 @@
+.table th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.table td {
+    vertical-align: middle;
+}
+.btn-group {
+    display: flex;
+    align-items: center;
+}
+.btn-group .btn {
+    margin-right: 5px;
+}
