@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{plantilla/template_user :: head}">
+  <meta charset="UTF-8">
+  <title>Control de Entrada/Salida de Vehículos</title>
+  <link rel="stylesheet" th:href="@{/css/tablas.css}"/>
+  <script th:src="@{/css/table.css}"></script>
+  <script th:src="@{/static/js/interactiveTable.js}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Carga jQuery UI para el autocompletado -->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  <!-- Estilos de jQuery UI (si es necesario) -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+</head>
+<body>
+<header th:replace="~{plantilla/template_user :: header}"></header>
+
+<div class="container">
+  <h1 class="mt-3" th:text="${titulo}">Control de Entrada/Salida de Vehículos</h1>
+
+  <table class="table">
+    <thead class="thead-dark">
+    <tr>
+      <th scope="col">MATRÍCULA</th>
+      <th scope="col">EMPRESA</th>
+      <th scope="col">FECHA/HORA SALIDA</th>
+      <th scope="col">OBSERVACIONES</th>
+      <th scope="col">FECHA/HORA ENTRADA</th>
+      <th scope="col">ACCIONES</th>
+    </tr>
+    </thead>
+    <tbody id="control_vehiculos-tbody">
+    <tr th:each="controlVehiculo, rowStat : ${listadoControles}" th:index="${rowStat.index}">
+      <td>
+        <!--<input type="text" class="matricula-input" th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}">
+        <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+        <input type="hidden" class="cod-vehiculo" th:value="${controlVehiculo.cod_vehiculo}">-->
+        <!--                <input type="text" class="matricula-input" name="matricula" list="sugerencias-${rowStat.index}"-->
+        <!--                       th:value="${controlVehiculo.matricula}"-->
+        <!--                       th:attr="data-row-index=${rowStat.index}"-->
+        <!--                       oninput="buscarMatriculas()" autocomplete="off">-->
+        <!--                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"-->
+        <!--                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off">-->
+        <!--                <datalist id="sugerencias-${rowStat.index}"></datalist>-->
+        <!--                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"-->
+        <!--                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off"-->
+        <!--                       list="sugerencias-${rowStat.index}"> &lt;!&ndash; Aquí el atributo list debe coincidir con el id del datalist &ndash;&gt;-->
+
+        <input type="text" id="matricula" list="lista-matriculas" placeholder="Ingrese matrícula">
+        <datalist id="lista-matriculas"></datalist>
+
+        <!--                <datalist id="sugerencias-${rowStat.index}"></datalist> &lt;!&ndash; Este es el datalist con un id único &ndash;&gt;-->
+
+
+
+        <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+
+      </td>
+      <td>
+        <input type="text" class="empresa-input" th:value="${controlVehiculo.empresa}">
+      </td>
+      <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-salida" th:text="${controlVehiculo.getFechaSalidaFormateada()}"></td>
+      <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="observaciones" th:text="${controlVehiculo.observaciones}"></td>
+      <td contenteditable="true" th:attr="data-id=${controlVehiculo.cod_control}" class="fecha-entrada" th:text="${controlVehiculo.getFechaEntradaFormateada()}"></td>
+      <td>
+        <div class="btn-group">
+          <button onclick="actualizarFila(this)" class="btn btn-primary">Actualizar</button>
+          <button onclick="eliminarFila(this)" class="btn btn-danger">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+    <!-- New row template for adding new entries -->
+    <tr id="new-row">
+      <td>
+        <input type="text" class="matricula-input" data-row-index="new">
+        <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+        <input type="hidden" class="cod-vehiculo">
+      </td>
+      <td>
+        <input type="text" class="empresa-input">
+      </td>
+      <td contenteditable="true" class="new-control fecha-salida"></td>
+      <td contenteditable="true" class="new-control observaciones"></td>
+      <td contenteditable="true" class="new-control fecha-entrada"></td>
+      <td>
+        <div class="btn-group">
+          <button onclick="guardarFila(this)" class="btn btn-primary">Guardar</button>
+          <button onclick="eliminarFila(this)" class="btn btn-danger">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <div style="margin-bottom: 100px;"></div>
+</div>
+<footer th:replace="~{plantilla/template_user :: footer}"></footer>
+
+<script>
+  function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+  }
+
+  function formatDate(date) {
+    let day = ("0" + date.getDate()).slice(-2);
+    let month = ("0" + (date.getMonth() + 1)).slice(-2);
+    let year = date.getFullYear();
+    let hours = ("0" + date.getHours()).slice(-2);
+    let minutes = ("0" + date.getMinutes()).slice(-2);
+    let seconds = ("0" + date.getSeconds()).slice(-2);
+
+    return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+  }
+
+  function actualizarFila(button) {
+    let fila = $(button).closest('tr');
+    let id = fila.find('[data-id]').attr('data-id');
+    let matricula = fila.find('.matricula-input').val();
+    let codVehiculo = fila.find('.cod-vehiculo').val();
+    let empresa = fila.find('.empresa-input').val();
+    let fechaSalida = fila.find('.fecha-salida').text().trim();
+    let observaciones = fila.find('.observaciones').text().trim();
+    let fechaEntrada = fila.find('.fecha-entrada').text().trim();
+
+    // Convertir las fechas a formato ISO si no están vacías y son válidas
+    let fechaSalidaISO = null;
+    let fechaEntradaISO = null;
+
+    if (fechaSalida) {
+      let parsedFechaSalida = new Date(Date.parse(fechaSalida));
+      if (isValidDate(parsedFechaSalida)) {
+        fechaSalidaISO = parsedFechaSalida.toISOString();
+      }
+    }
+
+    if (fechaEntrada) {
+      let parsedFechaEntrada = new Date(Date.parse(fechaEntrada));
+      if (isValidDate(parsedFechaEntrada)) {
+        fechaEntradaISO = parsedFechaEntrada.toISOString();
+      }
+    }
+
+    let url = '/control_vehiculos/actualizar/' + id;
+
+    let data = {
+      matricula: matricula,
+      cod_vehiculo: codVehiculo,
+      empresa: empresa,
+      fecha_salida: fechaSalidaISO,
+      observaciones: observaciones,
+      fecha_entrada: fechaEntradaISO
+    };
+
+    console.log("Datos enviados:", data); // Añade esto para verificar los datos en la consola del navegador
+
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(response) {
+        console.log('Datos actualizados correctamente:', response);
+        cargarListaControles(); // Recargar la lista después de actualizar
+      },
+      error: function(error) {
+        console.error('Error al actualizar datos:', error);
+      }
+    });
+  }
+
+  function guardarFila(button) {
+    let fila = $(button).closest('tr');
+    let matricula = fila.find('.matricula-input').val();
+    let codVehiculo = fila.find('.cod-vehiculo').val();
+    let empresa = fila.find('.empresa-input').val();
+    let fechaSalida = fila.find('.fecha-salida').text().trim();
+    let observaciones = fila.find('.observaciones').text().trim();
+    let fechaEntrada = fila.find('.fecha-entrada').text().trim();
+
+    // Convertir las fechas a formato ISO si no están vacías y son válidas
+    let fechaSalidaISO = null;
+    let fechaEntradaISO = null;
+
+    if (fechaSalida) {
+      let parsedFechaSalida = new Date(Date.parse(fechaSalida));
+      if (isValidDate(parsedFechaSalida)) {
+        fechaSalidaISO = parsedFechaSalida.toISOString();
+      }
+    }
+
+    if (fechaEntrada) {
+      let parsedFechaEntrada = new Date(Date.parse(fechaEntrada));
+      if (isValidDate(parsedFechaEntrada)) {
+        fechaEntradaISO = parsedFechaEntrada.toISOString();
+      }
+    }
+
+    let url = '/control_vehiculos/guardar';
+
+    let data = {
+      matricula: matricula,
+      cod_vehiculo: codVehiculo,
+      empresa: empresa,
+      fecha_salida: fechaSalidaISO,
+      observaciones: observaciones,
+      fecha_entrada: fechaEntradaISO
+    };
+
+    console.log("Datos enviados:", data); // Añade esto para verificar los datos en la consola del navegador
+
+    $.ajax({
+      url: url,
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function(response) {
+        console.log('Datos guardados correctamente:', response);
+        cargarListaControles(); // Recargar la lista después de guardar
+      },
+      error: function(error) {
+        console.error('Error al guardar datos:', error);
+      }
+    });
+  }
+
+  function eliminarFila(button) {
+    let fila = $(button).closest('tr');
+    let id = fila.find('[data-id]').attr('data-id');
+
+    $.ajax({
+      url: '/control_vehiculos/eliminar/' + id,
+      type: 'DELETE',
+      success: function(response) {
+        console.log('Datos eliminados correctamente:', response);
+        cargarListaControles(); // Recargar la lista después de eliminar
+      },
+      error: function(error) {
+        console.error('Error al eliminar datos:', error);
+      }
+    });
+  }
+
+  function cargarListaControles() {
+    $.ajax({
+      url: '/control_vehiculos/listar',
+      type: 'GET',
+      success: function(data) {
+        // Verifica el tipo y formato de `data`
+        console.log('Datos recibidos:', data);
+
+        let tbody = $('#control_vehiculos-tbody');
+        tbody.empty(); // Limpiar la tabla antes de añadir los datos
+
+        // Verifica si `data` es un array
+        if (Array.isArray(data)) {
+          data.forEach(function(controlVehiculo, index) {
+            let newRow = `<tr>
+                        <td>
+                            <input type="text" class="matricula-input" value="${controlVehiculo.matricula}" data-row-index="${index}">
+                            <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+
+                            <input type="hidden" class="cod-vehiculo" value="${controlVehiculo.cod_vehiculo}">
+                        </td>
+                        <td>
+                            <input type="text" class="empresa-input" value="${controlVehiculo.empresa}">
+                        </td>
+                        <td contenteditable="true" data-id="${controlVehiculo.cod_control}" class="fecha-salida">${controlVehiculo.fecha_salida}</td>
+                        <td contenteditable="true" data-id="${controlVehiculo.cod_control}" class="observaciones">${controlVehiculo.observaciones}</td>
+                        <td contenteditable="true" data-id="${controlVehiculo.cod_control}" class="fecha-entrada">${controlVehiculo.fecha_entrada}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button onclick="actualizarFila(this)" class="btn btn-primary">Actualizar</button>
+                                <button onclick="eliminarFila(this)" class="btn btn-danger">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>`;
+            tbody.append(newRow);
+          });
+
+          // Añadir la fila para nueva entrada
+          let newEntryRow = `<tr id="new-row">
+                    <td>
+                        <input type="text" class="matricula-input" data-row-index="new">
+                        <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+                        <input type="hidden" class="cod-vehiculo">
+                    </td>
+                    <td>
+                        <input type="text" class="empresa-input">
+                    </td>
+                    <td contenteditable="true" class="new-control fecha-salida"></td>
+                    <td contenteditable="true" class="new-control observaciones"></td>
+                    <td contenteditable="true" class="new-control fecha-entrada"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button onclick="guardarFila(this)" class="btn btn-primary">Guardar</button>
+                            <button onclick="eliminarFila(this)" class="btn btn-danger">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>`;
+          tbody.append(newEntryRow);
+        } else {
+          console.error('La respuesta del servidor no es un array:', data);
+        }
+      },
+      error: function(error) {
+        console.error('Error al cargar la lista de controles:', error);
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    cargarListaControles();
+
+    $(document).on('input', '.matricula-input', function() {
+      let inputElement = $(this);
+      let inputValue = inputElement.val();
+      let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+      let empresaInput = inputElement.closest('tr').find('.empresa-input');
+
+      if (inputValue.trim() !== '') {
+        $.ajax({
+          url: '/control_vehiculos/obtenerCodVehiculo?matricula=' + encodeURIComponent(inputValue),
+          type: 'GET',
+          success: function(data) {
+            if (data.cod_vehiculo) {
+              codVehiculoInput.val(data.cod_vehiculo);
+              empresaInput.val(data.nombre_empresa || '');
+              inputElement.closest('tr').find('.error').hide();
+            } else {
+              codVehiculoInput.val('');
+              empresaInput.val('');
+              inputElement.closest('tr').find('.error').show();
+            }
+          },
+          error: function() {
+            codVehiculoInput.val('');
+            empresaInput.val('');
+            inputElement.closest('tr').find('.error').show();
+          }
+        });
+      } else {
+        codVehiculoInput.val('');
+        empresaInput.val('');
+        inputElement.closest('tr').find('.error').hide();
+      }
+    });
+
+    $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+      $(this).text(formatDate(new Date()));
+    });
+  });
+
+  $(document).ready(function() {
+    $(document).on('input', '.matricula-input', function() {
+      let inputElement = $(this);
+      let inputValue = inputElement.val();
+      let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+      let empresaInput = inputElement.closest('tr').find('.empresa-input');
+
+      if (inputValue.trim() !== '') {
+        $.ajax({
+          url: '/control_vehiculos/obtenerCodVehiculo?matricula=' + encodeURIComponent(inputValue),
+          type: 'GET',
+          success: function(data) {
+            if (data.cod_vehiculo) {
+              codVehiculoInput.val(data.cod_vehiculo);
+              empresaInput.val(data.nombre.empresa || '');
+              inputElement.closest('tr').find('.error').hide();
+            } else {
+              codVehiculoInput.val('');
+              empresaInput.val('');
+              inputElement.closest('tr').find('.error').show();
+            }
+          },
+          error: function() {
+            codVehiculoInput.val('');
+            empresaInput.val('');
+            inputElement.closest('tr').find('.error').show();
+          }
+        });
+      } else {
+        codVehiculoInput.val('');
+        empresaInput.val('');
+        inputElement.closest('tr').find('.error').hide();
+      }
+    });
+
+    $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+      $(this).text(formatDate(new Date()));
+    });
+  });
+
+  $(document).ready(function() {
+    $(document).on('input', '.matricula-input', function() {
+      let inputElement = $(this);
+      let inputValue = inputElement.val();
+      let datalistElement = inputElement.siblings('datalist');
+      let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+      let empresaInput = inputElement.closest('tr').find('.empresa-input');
+      let errorSpan = inputElement.closest('tr').find('.error');
+
+      // Borrar las sugerencias previas
+      datalistElement.empty();
+
+      if (inputValue.trim() !== '') {
+        $.ajax({
+          url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
+          type: 'GET',
+          success: function(data) {
+            // Si la respuesta contiene sugerencias
+            if (Array.isArray(data)) {
+              data.forEach(function(matricula) {
+                // Añadir cada matrícula como una opción en el datalist
+                datalistElement.append(`<option value="${matricula}">`);
+              });
+              errorSpan.hide();
+            } else {
+              errorSpan.show();
+            }
+          },
+          error: function() {
+            datalistElement.empty();
+            errorSpan.show();
+          }
+        });
+      } else {
+        datalistElement.empty();
+        errorSpan.hide();
+      }
+    });
+
+    $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+      $(this).text(formatDate(new Date()));
+    });
+  });
+
+  document.getElementById("matricula").addEventListener("input", function () {
+    let term = this.value.trim(); // Obtiene el valor del input
+    if (term.length >= 2) { // Solo buscar si el usuario escribe al menos 2 caracteres
+      fetch(`http://localhost:8080/vehiculos/buscar?term=${term}`)
+              .then(response => response.json()) // Convierte la respuesta en JSON
+              .then(data => {
+                let dataList = document.getElementById("lista-matriculas");
+                dataList.innerHTML = ""; // Limpiar opciones previas
+
+                data.forEach(matricula => {
+                  let option = document.createElement("option");
+                  option.value = matricula; // Establece la matrícula como valor
+                  dataList.appendChild(option);
+                });
+              })
+              .catch(error => console.error("Error en la búsqueda de matrículas:", error));
+    }
+  });
+
+</script>
+
+</body>
+</html>
