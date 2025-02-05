@@ -373,89 +373,89 @@
         });
     });
 
-    $(document).ready(function () {
-        $(document).on('input', '.matricula-input', function () {
-            let inputElement = $(this);
-            let inputValue = inputElement.val();
-            let datalistElement = inputElement.siblings('datalist');
-            let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
-            let empresaInput = inputElement.closest('tr').find('.empresa-input');
-            let errorSpan = inputElement.closest('tr').find('.error');
-
-            // Borrar las sugerencias previas
-            datalistElement.empty();
-
-            if (inputValue.trim() !== '') {
-                $.ajax({
-                    url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
-                    type: 'GET',
-                    success: function (data) {
-                        // Si la respuesta contiene sugerencias
-                        if (Array.isArray(data)) {
-                            data.forEach(function (matricula) {
-                                // Añadir cada matrícula como una opción en el datalist
-                                datalistElement.append(`<option value="${matricula}">`);
-                            });
-                            errorSpan.hide();
-                        } else {
-                            errorSpan.show();
-                        }
-                    },
-                    error: function () {
-                        datalistElement.empty();
-                        errorSpan.show();
-                    }
-                });
-            } else {
-                datalistElement.empty();
-                errorSpan.hide();
-            }
-        });
-
-        $(document).on('click', '.fecha-salida, .fecha-entrada', function () {
-            $(this).text(formatDate(new Date()));
-        });
-    });
-
-    $(document).ready(function () {
-        // Evento para manejar la entrada de matrículas y obtener sugerencias
-        $(document).on('input', '.matricula-input', function () {
-            let inputElement = $(this);
-            let inputValue = inputElement.val();
-            let datalistElement = inputElement.siblings('datalist');
-            let errorSpan = inputElement.closest('tr').find('.error');
-
-            // Limpiar las sugerencias previas
-            datalistElement.empty();
-
-            if (inputValue.trim() !== '') {
-                $.ajax({
-                    url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
-                    type: 'GET',
-                    success: function (data) {
-                        // Si la respuesta contiene sugerencias
-                        if (Array.isArray(data)) {
-                            // Añadir cada matrícula como una opción en el datalist
-                            data.forEach(function (matricula) {
-                                datalistElement.append(`<option value="${matricula}">`);
-                            });
-                            errorSpan.hide();
-                        } else {
-                            errorSpan.show(); // Mostrar error si no se encuentran matrículas
-                        }
-                    },
-                    error: function () {
-                        datalistElement.empty();
-                        errorSpan.show(); // Mostrar error si hay un problema en la solicitud
-                    }
-                });
-            } else {
-                // Si el campo de matrícula está vacío, limpiar el datalist
-                datalistElement.empty();
-                errorSpan.hide();
-            }
-        });
-    });
+    // $(document).ready(function () {
+    //     $(document).on('input', '.matricula-input', function () {
+    //         let inputElement = $(this);
+    //         let inputValue = inputElement.val();
+    //         let datalistElement = inputElement.siblings('datalist');
+    //         let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+    //         let empresaInput = inputElement.closest('tr').find('.empresa-input');
+    //         let errorSpan = inputElement.closest('tr').find('.error');
+    //
+    //         // Borrar las sugerencias previas
+    //         datalistElement.empty();
+    //
+    //         if (inputValue.trim() !== '') {
+    //             $.ajax({
+    //                 url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
+    //                 type: 'GET',
+    //                 success: function (data) {
+    //                     // Si la respuesta contiene sugerencias
+    //                     if (Array.isArray(data)) {
+    //                         data.forEach(function (matricula) {
+    //                             // Añadir cada matrícula como una opción en el datalist
+    //                             datalistElement.append(`<option value="${matricula}">`);
+    //                         });
+    //                         errorSpan.hide();
+    //                     } else {
+    //                         errorSpan.show();
+    //                     }
+    //                 },
+    //                 error: function () {
+    //                     datalistElement.empty();
+    //                     errorSpan.show();
+    //                 }
+    //             });
+    //         } else {
+    //             datalistElement.empty();
+    //             errorSpan.hide();
+    //         }
+    //     });
+    //
+    //     $(document).on('click', '.fecha-salida, .fecha-entrada', function () {
+    //         $(this).text(formatDate(new Date()));
+    //     });
+    // });
+    //
+    // $(document).ready(function () {
+    //     // Evento para manejar la entrada de matrículas y obtener sugerencias
+    //     $(document).on('input', '.matricula-input', function () {
+    //         let inputElement = $(this);
+    //         let inputValue = inputElement.val();
+    //         let datalistElement = inputElement.siblings('datalist');
+    //         let errorSpan = inputElement.closest('tr').find('.error');
+    //
+    //         // Limpiar las sugerencias previas
+    //         datalistElement.empty();
+    //
+    //         if (inputValue.trim() !== '') {
+    //             $.ajax({
+    //                 url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
+    //                 type: 'GET',
+    //                 success: function (data) {
+    //                     // Si la respuesta contiene sugerencias
+    //                     if (Array.isArray(data)) {
+    //                         // Añadir cada matrícula como una opción en el datalist
+    //                         data.forEach(function (matricula) {
+    //                             datalistElement.append(`<option value="${matricula}">`);
+    //                         });
+    //                         errorSpan.hide();
+    //                     } else {
+    //                         errorSpan.show(); // Mostrar error si no se encuentran matrículas
+    //                     }
+    //                 },
+    //                 error: function () {
+    //                     datalistElement.empty();
+    //                     errorSpan.show(); // Mostrar error si hay un problema en la solicitud
+    //                 }
+    //             });
+    //         } else {
+    //             // Si el campo de matrícula está vacío, limpiar el datalist
+    //             datalistElement.empty();
+    //             errorSpan.hide();
+    //         }
+    //     });
+    // });
 
 
 </script>
