@@ -48,7 +48,7 @@ public class ControlVehiculoController {
 
     @GetMapping("/")
     public String listarControlVehiculos(Model model) {
-        LocalDateTime fechaLimite = LocalDateTime.now().minusDays(3);
+        LocalDateTime fechaLimite = LocalDateTime.now().minusDays(2);
         List<Control_Vehiculos> listadoControles = controlVehiculoService.listarControlVehiculos(fechaLimite);
         model.addAttribute("titulo", "Listado de Control de Vehículos");
         model.addAttribute("listadoControles", listadoControles);
@@ -57,7 +57,7 @@ public class ControlVehiculoController {
 
     @GetMapping("/listar")
     public ResponseEntity<List<Control_Vehiculos>> listarControl() {
-        LocalDateTime fechaLimite = LocalDateTime.now().minusDays(3);
+        LocalDateTime fechaLimite = LocalDateTime.now().minusDays(2);
         List<Control_Vehiculos> listadoControles = controlVehiculoService.listarControlVehiculos(fechaLimite);
 //        model.addAttribute("titulo", "Listado de Control de Vehículos");
 //        model.addAttribute("listadoControles", listadoControles);
