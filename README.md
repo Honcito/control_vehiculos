@@ -28,8 +28,12 @@ Consulta la sección de Despliegue para conocer cómo implementar el proyecto.
 Asegúrate de tener las siguientes herramientas instaladas en tu sistema:
 
 - **Java 17+** - Entorno de desarrollo Java.
-- **Maven** - Gestor de dependencias y construcción de proyectos.
+   ```https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html```
+
+
 - **SQLite** - Base de datos embebida.
+
+   ```https://www.sqlite.org/download.html```
 
 ### Instalación 🔧
 
@@ -53,8 +57,9 @@ Copia el archivo control_vehiculos.db (incluido en el repositorio) a la siguient
    ```bash
    C:/database/control_vehiculos.db.
 ```
-Compila y ejecuta el proyecto:
+Compila y ejecuta el proyecto o Ejecuta la aplicación con Maven: En el terminal, ejecuta el siguiente comando para iniciar tu aplicación Spring Boot:
 
+   ```mvn spring-boot:run```
 
 Uso de la aplicación
 
@@ -64,46 +69,34 @@ Accede a la interfaz web desde tu navegador en:
 ```
 2. Inicia sesión con las credenciales predeterminadas (configuradas en `application.properties`).
 
+   Usuario: admin
+
+   Contraseña: admin
+
 3. Explora las funcionalidades:
     - Registra vehículos.
     - Supervisa entradas y salidas.
     - Genera reportes.
 
-## Estilo de Codificación y Pruebas ⌨️
+Instalador del Proyecto 💻
 
-Incluye pruebas unitarias y de integración para garantizar la calidad del código. Ejecuta las pruebas con el siguiente comando:
-```bash
-mvn test
+El proyecto incluye un instalador que facilita la instalación de la aplicación en tu sistema. Para instalar la aplicación:
 
-Documentación de la API 📁
+    1. Ejecuta el archivo Setup.exe (incluido en el repositorio) desde la raíz del proyecto.
 
-La documentación de los endpoints de la API se puede consultar utilizando Swagger en:
+    2. Durante la instalación, podrás elegir si agregar un acceso directo de ControlVehiculos.exe en tu escritorio.
 
-http://localhost:8080/swagger-ui/
-=======
-http://localhost:8080
+    3. Una vez instalado, ejecuta ControlVehiculos.exe desde el escritorio o la carpeta de instalación.
 
-Inicia sesión con las credenciales predeterminadas (configuradas en application.properties).
+    4. Abre un navegador web y accede a la siguiente dirección:
 
-Explora las funcionalidades:
+      http://localhost:8080
 
-Registro de entradas y salidas de vehículos.
+Inicia sesión utilizando el nombre de usuario y contraseña predeterminados:
 
-Gestión de datos de vehículos, propietarios y empleados.
+    Usuario: admin
+    Contraseña: admin
 
-Generación y consulta de reportes.
-
-Estilo de Codificación y Pruebas ⌨️
-
-Incluye pruebas unitarias y de integración para garantizar la calidad del código. Ejecuta las pruebas con el siguiente comando:
-
-mvn test
-
-Documentación de la API 📑
-
-La documentación de los endpoints de la API se puede consultar utilizando el siguiente enlace de Postman:
-
-Control Vehículos API Endpoints Documentation
 
 Despliegue 📦
 
@@ -111,35 +104,37 @@ Empaqueta el proyecto en un archivo JAR:
 
 mvn clean package
 
-Ejecuta el JAR generado:
+Ejecuta el JAR generado desde el terminal en la carpeta de ubicación del .jar:
 
-java -jar target/control_vehiculos-0.0.1-SNAPSHOT.jar
+java -jar control_vehiculos-0.0.1-SNAPSHOT.jar
 
-Construido con 🛠️
+## Construido con 🛠️
 
-Java Spring Boot - Framework para el backend.
+- **Java Spring Boot** - Framework para el backend.
+- **Spring Security** - Seguridad y gestión de roles.
+- **Thymeleaf** - Motor de plantillas para la interfaz de usuario.
+- **SQLite** - Base de datos embebida.
+- **Bootstrap** - Estilo responsivo para la interfaz.
+- **Hibernate** - ORM para la gestión de datos.
+- **JavaScript** - Utilizado para realizar peticiones AJAX y mejorar la interactividad de la aplicación. Las peticiones AJAX permiten realizar consultas dinámicas sin recargar la página, lo que mejora la experiencia del usuario en la interfaz web.
 
-Spring Security - Seguridad y gestión de roles.
-
-Thymeleaf - Motor de plantillas para la interfaz de usuario.
-
-SQLite - Base de datos embebida.
-
-Bootstrap - Estilo responsivo para la interfaz.
-
-Hibernate - ORM para la gestión de datos.
 
 Autor ✒️
 
-[Tu Nombre] - Trabajo inicial - GitHub
+[Víctor Hong Gragera] - Trabajo inicial - GitHub
 
 Licencia 📄
 
-Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
+## Licencia 📄
+
+Este proyecto está bajo la licencia MIT.
+
+Consulta el archivo [LICENSE](./LICENSE) para más detalles.
+
 
 Agradecimientos 🎁
 
 A los recursos de código abierto que facilitaron el desarrollo.
 
-💪 Creado con pasión por [Tu Nombre].
+💪 Creado con pasión por [Víctor Hong Gragera].
 
