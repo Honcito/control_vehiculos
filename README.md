@@ -78,26 +78,7 @@ Accede a la interfaz web desde tu navegador en:
     - Supervisa entradas y salidas.
     - Genera reportes.
 
-Instalador del Proyecto 💻
-
-El proyecto incluye un instalador que facilita la instalación de la aplicación en tu sistema. Para instalar la aplicación:
-
-    1. Descomprime el archivo Setup.rar y ejecuta el archivo Setup.exe (incluido en el repositorio) desde la raíz del proyecto.
-
-    2. Durante la instalación, podrás elegir si agregar un acceso directo de ControlVehiculos.exe en tu escritorio.
-
-    3. Una vez instalado, ejecuta ControlVehiculos.exe desde el escritorio o la carpeta de instalación.
-
-    4. Abre un navegador web y accede a la siguiente dirección:
-
-      http://localhost:8080
-
-Inicia sesión utilizando el nombre de usuario y contraseña predeterminados:
-
-    Usuario: admin
-    Contraseña: admin
-
-
+   
 Despliegue 📦
 
 Empaqueta el proyecto en un archivo JAR:
