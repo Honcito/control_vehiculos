@@ -35,13 +35,13 @@ public class VehiculoController {
         this.vehiculoRepository = vehiculoRepository;
     }
 
-    @GetMapping("/vehiculos/formulario")
-    public String mostrarFormularioVehiculo(Model model) {
-        model.addAttribute("vehiculo", new Vehiculo()); // Si necesitas un vehículo para el formulario
-        List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
-        model.addAttribute("propietarios", propietarios); // Agregar la lista al modelo
-        return "vehiculos/formulario";
-    }
+//    @GetMapping("/vehiculos/formulario")
+//    public String mostrarFormularioVehiculo(Model model) {
+//        model.addAttribute("vehiculo", new Vehiculo()); // Si necesitas un vehículo para el formulario
+//        List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
+//        model.addAttribute("propietarios", propietarios); // Agregar la lista al modelo
+//        return "vehiculos/formulario";
+//    }
 
     @GetMapping("/")
     public String listarVehiculos(Model model) {
@@ -90,7 +90,7 @@ public class VehiculoController {
             List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
             model.addAttribute("vehiculo", vehiculo);
             model.addAttribute("propietarios", propietarios); // Añadir la lista al modelo
-            model.addAttribute("titulo", "Editar Vehículo");
+            model.addAttribute("titulo", "Formulario: Editar Vehículo");
             return "/vehiculos/crear";
         } else {
             return "redirect:/vehiculos/";
@@ -117,17 +117,17 @@ public class VehiculoController {
         return "redirect:/vehiculos/";
     }
 
-    @GetMapping("/buscar")
-    @ResponseBody
-    public List<String> buscarMatriculas(@RequestParam String term) {
-        List<String> matriculas = vehiculoRepository.findByMatriculaContainingIgnoreCase(term)
-                .stream()
-                .map(Vehiculo::getMatricula)
-                .collect(Collectors.toList());
-
-        System.out.println("Matrículas encontradas: " + matriculas); // Debug en consola
-        return matriculas;
-    }
+//    @GetMapping("/buscar")
+//    @ResponseBody
+//    public List<String> buscarMatriculas(@RequestParam String term) {
+//        List<String> matriculas = vehiculoRepository.findByMatriculaContainingIgnoreCase(term)
+//                .stream()
+//                .map(Vehiculo::getMatricula)
+//                .collect(Collectors.toList());
+//
+//        System.out.println("Matrículas encontradas: " + matriculas); // Debug en consola
+//        return matriculas;
+//    }
 
 
 }
