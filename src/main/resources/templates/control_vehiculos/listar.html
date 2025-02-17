@@ -3,15 +3,30 @@
 <head th:replace="~{plantilla/template_user :: head}">
     <meta charset="UTF-8">
     <title>Control de Entrada/Salida de Vehículos</title>
-    <link rel="stylesheet" th:href="@{/css/tablas.css}"/>
-    <script th:src="@{/css/table.css}"></script>
+    <link rel="stylesheet" th:href="@{/static/css/tablas.css}"/>
     <script th:src="@{/static/js/interactiveTable.js}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- Carga jQuery UI para el autocompletado -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <!-- Estilos de jQuery UI (si es necesario) -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+    <style>
+        .table th {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .btn-group {
+            display: flex;
+            align-items: center;
+        }
+        .btn-group .btn {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
 <header th:replace="~{plantilla/template_user :: header}"></header>
@@ -33,8 +48,24 @@
         <tbody id="control_vehiculos-tbody">
         <tr th:each="controlVehiculo, rowStat : ${listadoControles}" th:index="${rowStat.index}">
             <td>
-                <input type="text" class="matricula-input" name="matricula" id="matriculaInput" placeholder="Ingrese matrícula" autocomplete="off" list="lista-matriculas">
-                <datalist id="lista-matriculas"></datalist>
+                <!--<input type="text" class="matricula-input" th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}">
+                <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
+                <input type="hidden" class="cod-vehiculo" th:value="${controlVehiculo.cod_vehiculo}">-->
+                <!--                <input type="text" class="matricula-input" name="matricula" list="sugerencias-${rowStat.index}"-->
+                <!--                       th:value="${controlVehiculo.matricula}"-->
+                <!--                       th:attr="data-row-index=${rowStat.index}"-->
+                <!--                       oninput="buscarMatriculas()" autocomplete="off">-->
+                <!--                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"-->
+                <!--                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off">-->
+                <!--                <datalist id="sugerencias-${rowStat.index}"></datalist>-->
+                <input type="text" class="matricula-input" name="matricula" id="matriculaInput-${rowStat.index}"
+                       th:value="${controlVehiculo.matricula}" th:attr="data-row-index=${rowStat.index}" autocomplete="off"
+                       list="sugerencias-${rowStat.index}"> <!-- Aquí el atributo list debe coincidir con el id del datalist -->
+
+                <datalist id="sugerencias-${rowStat.index}"></datalist> <!-- Este es el datalist con un id único -->
+
+
+
                 <span class="error" style="color: red; display: none;">Matrícula no encontrada</span>
 
             </td>
@@ -91,8 +122,7 @@
         let hours = ("0" + date.getHours()).slice(-2);
         let minutes = ("0" + date.getMinutes()).slice(-2);
         let seconds = ("0" + date.getSeconds()).slice(-2);
-
-        return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+        return year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
     }
 
     function actualizarFila(button) {
@@ -141,11 +171,11 @@
             type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function (response) {
+            success: function(response) {
                 console.log('Datos actualizados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de actualizar
             },
-            error: function (error) {
+            error: function(error) {
                 console.error('Error al actualizar datos:', error);
             }
         });
@@ -196,11 +226,11 @@
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function (response) {
+            success: function(response) {
                 console.log('Datos guardados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de guardar
             },
-            error: function (error) {
+            error: function(error) {
                 console.error('Error al guardar datos:', error);
             }
         });
@@ -213,11 +243,11 @@
         $.ajax({
             url: '/control_vehiculos/eliminar/' + id,
             type: 'DELETE',
-            success: function (response) {
+            success: function(response) {
                 console.log('Datos eliminados correctamente:', response);
                 cargarListaControles(); // Recargar la lista después de eliminar
             },
-            error: function (error) {
+            error: function(error) {
                 console.error('Error al eliminar datos:', error);
             }
         });
@@ -227,7 +257,7 @@
         $.ajax({
             url: '/control_vehiculos/listar',
             type: 'GET',
-            success: function (data) {
+            success: function(data) {
                 // Verifica el tipo y formato de `data`
                 console.log('Datos recibidos:', data);
 
@@ -236,7 +266,7 @@
 
                 // Verifica si `data` es un array
                 if (Array.isArray(data)) {
-                    data.forEach(function (controlVehiculo, index) {
+                    data.forEach(function(controlVehiculo, index) {
                         let newRow = `<tr>
                         <td>
                             <input type="text" class="matricula-input" value="${controlVehiculo.matricula}" data-row-index="${index}">
@@ -285,16 +315,16 @@
                     console.error('La respuesta del servidor no es un array:', data);
                 }
             },
-            error: function (error) {
+            error: function(error) {
                 console.error('Error al cargar la lista de controles:', error);
             }
         });
     }
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         cargarListaControles();
 
-        $(document).on('input', '.matricula-input', function () {
+        $(document).on('input', '.matricula-input', function() {
             let inputElement = $(this);
             let inputValue = inputElement.val();
             let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
@@ -304,7 +334,7 @@
                 $.ajax({
                     url: '/control_vehiculos/obtenerCodVehiculo?matricula=' + encodeURIComponent(inputValue),
                     type: 'GET',
-                    success: function (data) {
+                    success: function(data) {
                         if (data.cod_vehiculo) {
                             codVehiculoInput.val(data.cod_vehiculo);
                             empresaInput.val(data.nombre_empresa || '');
@@ -315,7 +345,7 @@
                             inputElement.closest('tr').find('.error').show();
                         }
                     },
-                    error: function () {
+                    error: function() {
                         codVehiculoInput.val('');
                         empresaInput.val('');
                         inputElement.closest('tr').find('.error').show();
@@ -328,13 +358,14 @@
             }
         });
 
-        $(document).on('click', '.fecha-salida, .fecha-entrada', function () {
+        $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
             $(this).text(formatDate(new Date()));
         });
     });
 
-    $(document).ready(function () {
-        $(document).on('input', '.matricula-input', function () {
+    $(document).ready(function() {
+        // Asegúrate de que el ID de la matrícula sea único por fila
+        $(document).on('input', '.matricula-input', function() {
             let inputElement = $(this);
             let inputValue = inputElement.val();
             let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
@@ -344,7 +375,7 @@
                 $.ajax({
                     url: '/control_vehiculos/obtenerCodVehiculo?matricula=' + encodeURIComponent(inputValue),
                     type: 'GET',
-                    success: function (data) {
+                    success: function(data) {
                         if (data.cod_vehiculo) {
                             codVehiculoInput.val(data.cod_vehiculo);
                             empresaInput.val(data.nombre.empresa || '');
@@ -355,7 +386,7 @@
                             inputElement.closest('tr').find('.error').show();
                         }
                     },
-                    error: function () {
+                    error: function() {
                         codVehiculoInput.val('');
                         empresaInput.val('');
                         inputElement.closest('tr').find('.error').show();
@@ -368,97 +399,55 @@
             }
         });
 
-        $(document).on('click', '.fecha-salida, .fecha-entrada', function () {
+        $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
             $(this).text(formatDate(new Date()));
         });
     });
 
-    // $(document).ready(function () {
-    //     $(document).on('input', '.matricula-input', function () {
-    //         let inputElement = $(this);
-    //         let inputValue = inputElement.val();
-    //         let datalistElement = inputElement.siblings('datalist');
-    //         let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
-    //         let empresaInput = inputElement.closest('tr').find('.empresa-input');
-    //         let errorSpan = inputElement.closest('tr').find('.error');
-    //
-    //         // Borrar las sugerencias previas
-    //         datalistElement.empty();
-    //
-    //         if (inputValue.trim() !== '') {
-    //             $.ajax({
-    //                 url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
-    //                 type: 'GET',
-    //                 success: function (data) {
-    //                     // Si la respuesta contiene sugerencias
-    //                     if (Array.isArray(data)) {
-    //                         data.forEach(function (matricula) {
-    //                             // Añadir cada matrícula como una opción en el datalist
-    //                             datalistElement.append(`<option value="${matricula}">`);
-    //                         });
-    //                         errorSpan.hide();
-    //                     } else {
-    //                         errorSpan.show();
-    //                     }
-    //                 },
-    //                 error: function () {
-    //                     datalistElement.empty();
-    //                     errorSpan.show();
-    //                 }
-    //             });
-    //         } else {
-    //             datalistElement.empty();
-    //             errorSpan.hide();
-    //         }
-    //     });
-    //
-    //     $(document).on('click', '.fecha-salida, .fecha-entrada', function () {
-    //         $(this).text(formatDate(new Date()));
-    //     });
-    // });
-    //
-    // $(document).ready(function () {
-    //     // Evento para manejar la entrada de matrículas y obtener sugerencias
-    //     $(document).on('input', '.matricula-input', function () {
-    //         let inputElement = $(this);
-    //         let inputValue = inputElement.val();
-    //         let datalistElement = inputElement.siblings('datalist');
-    //         let errorSpan = inputElement.closest('tr').find('.error');
-    //
-    //         // Limpiar las sugerencias previas
-    //         datalistElement.empty();
-    //
-    //         if (inputValue.trim() !== '') {
-    //             $.ajax({
-    //                 url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
-    //                 type: 'GET',
-    //                 success: function (data) {
-    //                     // Si la respuesta contiene sugerencias
-    //                     if (Array.isArray(data)) {
-    //                         // Añadir cada matrícula como una opción en el datalist
-    //                         data.forEach(function (matricula) {
-    //                             datalistElement.append(`<option value="${matricula}">`);
-    //                         });
-    //                         errorSpan.hide();
-    //                     } else {
-    //                         errorSpan.show(); // Mostrar error si no se encuentran matrículas
-    //                     }
-    //                 },
-    //                 error: function () {
-    //                     datalistElement.empty();
-    //                     errorSpan.show(); // Mostrar error si hay un problema en la solicitud
-    //                 }
-    //             });
-    //         } else {
-    //             // Si el campo de matrícula está vacío, limpiar el datalist
-    //             datalistElement.empty();
-    //             errorSpan.hide();
-    //         }
-    //     });
-    // });
+    $(document).ready(function() {
+        $(document).on('input', '.matricula-input', function() {
+            let inputElement = $(this);
+            let inputValue = inputElement.val();
+            let datalistElement = inputElement.siblings('datalist');
+            let codVehiculoInput = inputElement.closest('tr').find('.cod-vehiculo');
+            let empresaInput = inputElement.closest('tr').find('.empresa-input');
+            let errorSpan = inputElement.closest('tr').find('.error');
 
+            // Borrar las sugerencias previas
+            datalistElement.empty();
+
+            if (inputValue.trim() !== '') {
+                $.ajax({
+                    url: '/vehiculos/buscar?term=' + encodeURIComponent(inputValue),
+                    type: 'GET',
+                    success: function(data) {
+                        // Si la respuesta contiene sugerencias
+                        if (Array.isArray(data)) {
+                            data.forEach(function(matricula) {
+                                // Añadir cada matrícula como una opción en el datalist
+                                datalistElement.append(`<option value="${matricula}">`);
+                            });
+                            errorSpan.hide();
+                        } else {
+                            errorSpan.show();
+                        }
+                    },
+                    error: function() {
+                        datalistElement.empty();
+                        errorSpan.show();
+                    }
+                });
+            } else {
+                datalistElement.empty();
+                errorSpan.hide();
+            }
+        });
+
+        $(document).on('click', '.fecha-salida, .fecha-entrada', function() {
+            $(this).text(formatDate(new Date()));
+        });
+    });
 
 </script>
-
 </body>
 </html>
