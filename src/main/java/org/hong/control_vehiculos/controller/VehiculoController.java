@@ -83,18 +83,33 @@ public class VehiculoController {
         return "redirect:/vehiculos/";
     }
 
+//    @GetMapping("/edit/{id}")
+//    public String editar(@PathVariable("id") Long id, Model model) {
+//        Vehiculo vehiculo = vehiculoService.buscarVehiculoPorId(id);
+//        if (vehiculo != null) {
+//            List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
+//            model.addAttribute("vehiculo", vehiculo);
+//            model.addAttribute("propietarios", propietarios); // Añadir la lista al modelo
+//            model.addAttribute("titulo", "Formulario: Editar Vehículo");
+//            return "/vehiculos/crear";
+//        } else {
+//            return "redirect:/vehiculos/";
+//        }
+//    }
+
     @GetMapping("/edit/{id}")
     public String editar(@PathVariable("id") Long id, Model model) {
         Vehiculo vehiculo = vehiculoService.buscarVehiculoPorId(id);
-        if (vehiculo != null) {
-            List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
-            model.addAttribute("vehiculo", vehiculo);
-            model.addAttribute("propietarios", propietarios); // Añadir la lista al modelo
-            model.addAttribute("titulo", "Formulario: Editar Vehículo");
-            return "/vehiculos/crear";
-        } else {
-            return "redirect:/vehiculos/";
+        if (vehiculo == null){
+            System.out.println("El vehículo no existe");
+            return "redirect:/vehiculos/listar";
         }
+        model.addAttribute("titulo", "Formulario: Editar Vehículo");
+        List<Propietario> propietarios = propietarioService.listarPropietarios(); // Obtener la lista de propietarios
+        model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("propietarios", propietarios); // Añadir la lista al modelo
+        System.out.println("Vehículo " + vehiculo.getCod_vehiculo() + ": Datos modificados");
+        return "vehiculos/crear";
     }
 
 

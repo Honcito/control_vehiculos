@@ -38,7 +38,8 @@
                     </select>
                 </div>
                 <div class="card-footer bg-dark">
-                    <input type="submit" class="btn btn-primary btn-sm" value="Guardar"/>
+<!--                    <input type="submit" class="btn btn-primary btn-sm" value="Guardar"/>-->
+                    <input type="submit" class="btn btn-primary btn-sm" th:value="${usuario.id_usuario} ? 'Actualizar' : 'Guardar'"/>
                 </div>
             </form>
         </div>
